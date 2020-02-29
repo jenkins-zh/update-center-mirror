@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jenkins-cn</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="chart" style="width:100%;height:680px;"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@4.6.0/dist/echarts.min.js"></script>
+<script>
+    // 测试数据
+    var jenkinsdata = { "Data": { "Data": { "2020-01-12": 20, "2020-01-13": 158, "2020-01-14": 145, "2020-01-15": 147, "2020-01-16": 126, "2020-01-17": 143, "2020-01-18": 86, "2020-01-19": 108, "2020-01-20": 109, "2020-01-21": 103, "2020-01-22": 59, "2020-01-23": 60, "2020-01-24": 44, "2020-01-25": 51, "2020-01-26": 44, "2020-01-27": 59, "2020-01-28": 83, "2020-01-29": 89, "2020-01-30": 73, "2020-01-31": 84, "2020-02-01": 76, "2020-02-02": 106, "2020-02-03": 146, "2020-02-04": 118, "2020-02-05": 142, "2020-02-06": 124, "2020-02-07": 128, "2020-02-08": 106, "2020-02-09": 84, "2020-02-10": 146, "2020-02-11": 297, "2020-02-12": 303, "2020-02-13": 307, "2020-02-14": 273, "2020-02-15": 289, "2020-02-16": 211, "2020-02-17": 180, "2020-02-18": 221, "2020-02-19": 358, "2020-02-20": 242, "2020-02-21": 169 } }, "Error": null };
+    function setChart(data) {
+        var myChart = echarts.init($("#chart")[0]);
+        var chartData = data.Data.Data;
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                text: 'Jenkins镜像源下载数据'
+            },
+            tooltip: {},
+            legend: {
+                data: ['下载量']
+            },
+            xAxis: {
+                data: Object.keys(chartData)
+            },
+            yAxis: {},
+            series: [{
+                name: '下载量',
+                type: 'line',
+                data: Object.values(chartData)
+            }]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+    $(function () {
+        // 跨域问题无法使用
+        $.getJSON("https://updates.jenkins-zh.cn/plugins", function (result) {
+            if (result.Error == null) {
+                setChart(result);
+            }
+        });
+        // 测试数据
+        setChart(jenkinsdata);
+    });
+</script>
+
+</html>
