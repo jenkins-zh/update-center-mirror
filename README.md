@@ -1,3 +1,5 @@
+[中文](README-zh.md)
+
 ## Jenkins Update Center Mirror
 
 This repo stores several Jenkins Update Center mirrors.
