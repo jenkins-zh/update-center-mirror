@@ -7,6 +7,8 @@ Which include:
 
 The mirror proxy is [https://updates.jenkins-zh.cn/update-center.json](https://updates.jenkins-zh.cn/update-center.json)
 
+Check out the download data from [here](data).
+
 ## Backup
 
 This repo has been backuped in several places:
