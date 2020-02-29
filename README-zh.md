@@ -8,7 +8,7 @@
 
 镜像的代理地址为 [https://updates.jenkins-zh.cn/update-center.json](https://updates.jenkins-zh.cn/update-center.json)
 
-点击这里](data)查看 Jenkins 中国镜像源的使用情况。
+【点击这里](data)查看 Jenkins 中国镜像源的使用情况。
 
 ## 备份
 
