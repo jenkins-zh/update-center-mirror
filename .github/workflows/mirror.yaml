@@ -186,15 +186,9 @@ jobs:
         -mirror-provider tsinghua
     - name: Publish to GitHub
       run: |
+        cp -R mirror/* tsinghua
         git config --local user.email "361981269@qq.com"
         git config --local user.name "rick"
         git add tsinghua
         git commit -m 'Auto commit by rick bot'
-        git push https://linuxsuren:${{ secrets.GITHUB_SECRETS }}@github.com/jenkins-zh/update-center-mirror.git
-    - name: Publish to Gitee
-      uses: jenkins-zh/update-center-actions@master
-      env:
-        GIT_DEPLOY_KEY: ${{ secrets.GIT_DEPLOY_KEY }}
-        HUGO_VERSION: "0.53"
-        WEBSITE_GIT: "git@gitee.com:jenkins-zh/update-center-mirror.git"
-        WEBSITE_DIR: "update-center-mirror"
+        git push https://linuxsuren:${{ secrets.GITHUB_LINUXSUREN_SECRETS }}@github.com/jenkins-zh/update-center-mirror.git HEAD:master
