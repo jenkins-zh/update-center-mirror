@@ -25,7 +25,10 @@ jobs:
         mkdir mirror
 
         curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/current/updates/hudson.tasks.Maven.MavenInstaller.json -o tsinghua/current/updates/hudson.tasks.Maven.MavenInstaller.json --create-dirs
-        
+        curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/current/updates/hudson.tasks.Maven.MavenInstaller.json.html -o tsinghua/current/updates/hudson.tasks.Maven.MavenInstaller.json.html --create-dirs
+        curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/current/updates/hudson.tools.JDKInstaller.json -o tsinghua/current/updates/hudson.tools.JDKInstaller.json --create-dirs
+        curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/current/updates/hudson.tools.JDKInstaller.json.html -o tsinghua/current/updates/hudson.tools.JDKInstaller.json.html --create-dirs
+
         curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json -o official/update-center.json --create-dirs
         
         curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/current/update-center.json -o official/current/update-center.json --create-dirs
