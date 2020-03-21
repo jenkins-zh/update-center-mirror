@@ -11,7 +11,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+  
     steps:
     - uses: actions/checkout@v1
     - name: Get Certificate
@@ -219,5 +220,5 @@ jobs:
         git config --local user.email "361981269@qq.com"
         git config --local user.name "rick"
         git add tsinghua
-        git commit -m 'Auto commit by rick bot'
+        git commit -m "Auto commit by rick's bot, ci skip"
         git push https://linuxsuren:${{ secrets.GITHUB_LINUXSUREN_SECRETS }}@github.com/jenkins-zh/update-center-mirror.git HEAD:master
