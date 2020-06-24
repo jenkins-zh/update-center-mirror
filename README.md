@@ -9,7 +9,7 @@ Which include:
 
 The mirror proxy is [https://updates.jenkins-zh.cn/update-center.json](https://updates.jenkins-zh.cn/update-center.json)
 
-Check out the download data from [here](data).
+Check out the download data from [here](https://jenkins-zh.github.io/update-center-mirror/data).
 
 ## Backup
 
