@@ -53,6 +53,7 @@ jobs:
           curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/stable-2.121/update-center.json -o official/stable-2.121/update-center.json --create-dirs
           curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/stable-2.107/update-center.json -o official/stable-2.107/update-center.json --create-dirs
           curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/stable-1.651/update-center.json -o official/stable-1.651/update-center.json --create-dirs
+          curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/dynamic-stable-2.222.4/update-center.json -o official/dynamic-stable-2.222.4/update-center.json --create-dirs
           curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/2.150/update-center.json -o official/2.150/update-center.json --create-dirs
           curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/2.164/update-center.json -o official/2.164/update-center.json --create-dirs
           curl https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/2.176/update-center.json -o official/2.176/update-center.json --create-dirs
@@ -189,6 +190,14 @@ jobs:
           docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.4 -connection-check-url https://www.baidu.com/ \
           -mirror-json /mirror/stable-1.651/update-center.json -mirror-url https://mirrors.tuna.tsinghua.edu.cn/jenkins/ \
           -official-json /official/stable-1.651/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tsinghua
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.4 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/dynamic-stable-2.222.4/update-center.json -mirror-url https://mirrors.tuna.tsinghua.edu.cn/jenkins/ \
+          -official-json /official/dynamic-stable-2.222.4/update-center.json \
           -key /rootCA/mirror-adapter.key \
           -certificate /rootCA/mirror-adapter.crt \
           -root-certificate /rootCA/mirror-adapter.crt \
