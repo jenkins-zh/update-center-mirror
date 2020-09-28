@@ -6,6 +6,8 @@ This repo stores several Jenkins Update Center mirrors.
 Which include:
 
 * tsinghua
+* huawei
+* tencent
 
 The mirror proxy is [https://updates.jenkins-zh.cn/update-center.json](https://updates.jenkins-zh.cn/update-center.json)
 

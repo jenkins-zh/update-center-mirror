@@ -5,6 +5,8 @@
 这个仓库存储了多个 Jenkins 更新中心镜像，包括：
 
 * 清华镜像源
+* 华为镜像源
+* 腾讯镜像源
 
 镜像的代理地址为 [https://updates.jenkins-zh.cn/update-center.json](https://updates.jenkins-zh.cn/update-center.json)
 
