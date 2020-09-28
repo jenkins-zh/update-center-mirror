@@ -1,0 +1,298 @@
+name: Mirror-Cache
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Get Certificate
+        run: |
+          git clone https://linuxsuren:${{ secrets.GITHUB_LINUXSUREN_SECRETS }}@github.com/LinuxSuRen/update-center-mirror-private.git
+      - name: Run a multi-line script
+        env:
+          DOCKER_TOKEN: ${{ secrets.DOCKER }}
+        run: |
+          mkdir -p official/updates
+          mkdir mirror
+
+          ## 华为源镜像
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/current/updates/hudson.tasks.Maven.MavenInstaller.json -o official/current/updates/hudson.tasks.Maven.MavenInstaller.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/current/updates/hudson.tasks.Maven.MavenInstaller.json.html -o official/current/updates/hudson.tasks.Maven.MavenInstaller.json.html --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/current/updates/hudson.tools.JDKInstaller.json -o official/current/updates/hudson.tools.JDKInstaller.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/current/updates/hudson.tools.JDKInstaller.json.html -o official/current/updates/hudson.tools.JDKInstaller.json.html --create-dirs
+
+          curl https://updates.jenkins.io/stable-2.204/updates/hudson.tasks.Maven.MavenInstaller.json -o tencent/stable-2.204/updates/hudson.tasks.Maven.MavenInstaller.json --create-dirs
+          curl https://updates.jenkins.io/2.204/updates/hudson.tasks.Maven.MavenInstaller.json -o tencent/2.204/updates/hudson.tasks.Maven.MavenInstaller.json --create-dirs
+          curl https://updates.jenkins.io/stable-2.204/updates/hudson.tasks.Maven.MavenInstaller.json.html -o tencent/stable-2.204/updates/hudson.tasks.Maven.MavenInstaller.json.html --create-dirs
+          curl https://updates.jenkins.io/2.204/updates/hudson.tasks.Maven.MavenInstaller.json.html -o tencent/2.204/updates/hudson.tasks.Maven.MavenInstaller.json.html --create-dirs
+          curl https://updates.jenkins.io/stable-2.204/updates/hudson.tools.JDKInstaller.json -o tencent/stable-2.204/updates/hudson.tools.JDKInstaller.json --create-dirs
+          curl https://updates.jenkins.io/2.204/updates/hudson.tools.JDKInstaller.json -o tencent/2.204/updates/hudson.tools.JDKInstaller.json --create-dirs
+          curl https://updates.jenkins.io/stable-2.204/updates/hudson.tools.JDKInstaller.json.html -o tencent/stable-2.204/updates/hudson.tools.JDKInstaller.json.html --create-dirs
+          curl https://updates.jenkins.io/2.204/updates/hudson.tools.JDKInstaller.json.html -o tencent/2.204/updates/hudson.tools.JDKInstaller.json.html --create-dirs
+
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/update-center.json -o official/update-center.json --create-dirs
+
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/current/update-center.json -o official/current/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/experimental/update-center.json -o official/experimental/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.235/update-center.json -o official/stable-2.235/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.222/update-center.json -o official/stable-2.222/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.204/update-center.json -o official/stable-2.204/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.190/update-center.json -o official/stable-2.190/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.176/update-center.json -o official/stable-2.176/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.164/update-center.json -o official/stable-2.164/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.150/update-center.json -o official/stable-2.150/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.138/update-center.json -o official/stable-2.138/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.121/update-center.json -o official/stable-2.121/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-2.107/update-center.json -o official/stable-2.107/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/stable-1.651/update-center.json -o official/stable-1.651/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/dynamic-stable-2.222.4/update-center.json -o official/dynamic-stable-2.222.4/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/dynamic-stable-2.235.2/update-center.json -o official/dynamic-stable-2.235.2/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/dynamic-stable-2.249.1/update-center.json -o official/dynamic-stable-2.249.1/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/2.150/update-center.json -o official/2.150/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/2.164/update-center.json -o official/2.164/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/2.176/update-center.json -o official/2.176/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/2.190/update-center.json -o official/2.190/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/2.204/update-center.json -o official/2.204/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/2.222/update-center.json -o official/2.222/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/2.235/update-center.json -o official/2.235/update-center.json --create-dirs
+          curl https://mirrors.cloud.tencent.com/jenkins/updates/dynamic-2.251/update-center.json -o official/dynamic-2.251/update-center.json --create-dirs
+
+          ls -Rhal official
+          pwd
+
+          docker login docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 --username LinuxSuRen --password ${DOCKER_TOKEN}
+
+          ## 华为源镜像
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/current/updates/hudson.tools.JDKInstaller.json.html -tools -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/current/updates/hudson.tools.JDKInstaller.json.html \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/current/updates/hudson.tasks.Maven.MavenInstaller.json.html -tools -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/current/updates/hudson.tasks.Maven.MavenInstaller.json.html \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/current/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/current/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/experimental/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/experimental/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/dynamic-2.251/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/dynamic-2.251/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.235/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.235/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.222/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.222/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.204/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.204/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.190/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.190/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.176/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.176/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.164/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.164/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.150/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.150/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.138/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.138/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.121/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.121/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-2.107/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-2.107/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/stable-1.651/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/stable-1.651/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/dynamic-stable-2.222.4/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/dynamic-stable-2.222.4/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/dynamic-stable-2.235.2/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/dynamic-stable-2.235.2/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/dynamic-stable-2.249.1/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/dynamic-stable-2.249.1/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/2.150/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/2.150/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/2.164/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/2.164/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/2.176/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/2.176/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/2.190/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/2.190/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/2.204/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/2.204/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/2.222/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/2.222/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+          docker run -v $(pwd)/update-center-mirror-private/rootCA:/rootCA -v $(pwd)/official:/official -v $(pwd)/mirror:/mirror docker.pkg.github.com/jenkins-zh/mirror-adapter/mirror-adapter:0.0.5 -connection-check-url https://www.baidu.com/ \
+          -mirror-json /mirror/2.235/update-center.json -mirror-url https://mirrors.cloud.tencent.com/jenkins/ \
+          -official-json /official/2.235/update-center.json \
+          -key /rootCA/mirror-adapter.key \
+          -certificate /rootCA/mirror-adapter.crt \
+          -root-certificate /rootCA/mirror-adapter.crt \
+          -mirror-provider tencent
+
+      - name: Publish to GitHub
+        run: |
+          cp -R mirror/* tencent
+          git config --local user.email "361981269@qq.com"
+          git config --local user.name "rick"
+          git add tencent
+          (git status | grep tencent) && git commit -m "Auto commit by rick's bot, ci skip"
+          git push https://linuxsuren:${{ secrets.GITHUB_LINUXSUREN_SECRETS }}@github.com/jenkins-zh/update-center-mirror.git HEAD:master
